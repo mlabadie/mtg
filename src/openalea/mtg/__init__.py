@@ -15,3 +15,7 @@ try:
 except ImportError:
     DressingData = None
     PlantFrame = None
+    turtle = None
+    frame = None
+    plantframe = None
+    dresser = None
