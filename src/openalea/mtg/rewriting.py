@@ -42,13 +42,7 @@ def module(name, scale, namespace):
     def __init_custom_module__(self, **args):
         Module.__init__(self, name, scale, **args)
 
-    try:
-        from new import classobj
-        namespace[name] = classobj(name,(Module,),{'__init__':__init_custom_module__})
-    except:
-        # TODO: Adapt to Python 3.8
-        from types import new_class
-        namespace[name] = new_class(name, (Module,),{'__init__':__init_custom_module__})
+    namespace[name] = type(name,(Module,),{'__init__':__init_custom_module__})
 
 def retrieve_modules(mtg, namespace):
     labels = mtg.property('label')
