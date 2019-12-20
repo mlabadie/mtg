@@ -1,6 +1,6 @@
-import openalea.mtg.rewriting as rw; importlib.reload(rw) 
-from openalea.mtg.rewriting import *
 import importlib
+import openalea.mtg.rewriting as rw#; importlib.reload(rw)
+from openalea.mtg.rewriting import *
 
 
 module('Plant',       1, globals())
@@ -40,7 +40,7 @@ def test1():
             return axiom()
 
         @production
-        def GrowthPoint(self, node): 
+        def GrowthPoint(self, node):
             node.produce( BS(), Internode(), Segment())
 
 
@@ -68,7 +68,7 @@ def test3():
             return produce(Plant(), BS(bid = 1), Internode(), Segment(), [Internode(), Segment()], BS(bid=2), Internode, Segment, [Internode(), Segment()] , Internode(), Segment() )
 
         @production
-        def BS(self, node): 
+        def BS(self, node):
             if node.bid == 2:
                 node.produce( )
 
@@ -84,7 +84,7 @@ def test4():
             return produce(Plant(), BS(), Internode(), Segment(), [Internode(), Segment()], GrowthPoint(), [Internode(), Segment()] , Segment(), Internode(), Segment() )
 
         @production
-        def GrowthPoint(self, node): 
+        def GrowthPoint(self, node):
             node.produce( BS,  Internode(), Segment())
 
 
@@ -104,7 +104,7 @@ def test5():
             return axiom()
 
         @production
-        def GrowthPoint(self, node): 
+        def GrowthPoint(self, node):
             node.produce( )
 
 
