@@ -2,14 +2,14 @@
 #
 #       OpenAlea.mtg
 #
-#       Copyright 2008 INRIA - CIRAD - INRA  
+#       Copyright 2008 INRIA - CIRAD - INRA
 #
 #       File author(s): Christophe Pradal <christophe.pradal.at.cirad.fr>
 #
 #       Distributed under the Cecill-C License.
 #       See accompanying file LICENSE.txt or copy at
 #           http://www.cecill.info/licences/Licence_CeCILL-C_V1-en.html
-# 
+#
 #       OpenAlea WebSite : http://openalea.gforge.inria.fr
 #
 ################################################################################
@@ -17,7 +17,10 @@
 from openalea.mtg.mtg import *
 from openalea.mtg.io import *
 from openalea.mtg.traversal import *
-from time import clock
+try:
+    from time import clock
+except:
+    from time import perf_counter as clock
 
 def test_traversal():
     mtg = MTG()
@@ -25,7 +28,7 @@ def test_traversal():
     mtg = simple_tree(mtg, mtg.root, nb_vertices=1000)
     t1 = clock()
     print(t1-t); t = t1
-    
+
     l1 = list(pre_order(mtg, mtg.root))
     t1 = clock()
     print(t1-t); t = t1
@@ -36,7 +39,7 @@ def test_traversal():
     t1 = clock()
     print(t1-t); t = t1
 
-    assert l1 == l2 
+    assert l1 == l2
     assert l1 == l3
 
     s1 = set(l1)
