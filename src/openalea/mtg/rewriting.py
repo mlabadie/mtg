@@ -3,14 +3,14 @@
 #
 #       openAlea.mtg.rewriting
 #
-#       Copyright 2015 INRIA - CIRAD - INRA  
+#       Copyright 2015 INRIA - CIRAD - INRA
 #
 #       File author(s): Frederic Boudon <frederic.boudon.at.cirad.fr>
 #
 #       Distributed under the Cecill-C License.
 #       See accompanying file LICENSE.txt or copy at
 #           http://www.cecill.info/licences/Licence_CeCILL-C_V1-en.html
-# 
+#
 #       OpenAlea WebSite : http://openalea.gforge.inria.fr
 #
 ################################################################################
@@ -42,8 +42,13 @@ def module(name, scale, namespace):
     def __init_custom_module__(self, **args):
         Module.__init__(self, name, scale, **args)
 
-    from new import classobj
-    namespace[name] = classobj(name,(Module,),{'__init__':__init_custom_module__})
+    try:
+        from new import classobj
+        namespace[name] = classobj(name,(Module,),{'__init__':__init_custom_module__})
+    except:
+        # TODO: Adapt to Python 3.8
+        from types import new_class
+        namespace[name] = new_class(name, (Module,),{'__init__':__init_custom_module__})
 
 def retrieve_modules(mtg, namespace):
     labels = mtg.property('label')
@@ -55,7 +60,7 @@ def retrieve_modules(mtg, namespace):
                 modules[l] = mtg.scale(vid)
                 break
     for name, scale in list(modules.items()):
-        module(name, scale, namespace) 
+        module(name, scale, namespace)
 
 
 #### Production application
@@ -87,7 +92,7 @@ def __apply_production__(mtg, current, production, edge_type, lasts = None):
                 ## fuzy case: we do not know what are the element at the smallest scale which should be the parent.
                 ## we choose the last apical one.
                 complexparent = current.parent()
-                if complexparent: 
+                if complexparent:
                     apicalcomponent = complexparent.component_roots_at_scale(module.scale)[0]
                     while True:
                         compchild = [c for c in comp.children() if c.edge_type() == '<' ]
@@ -174,7 +179,7 @@ def __replace_and_produce__(mtg, vid, production):
     # sewing
 
     scalevid = mtg.scale(vid)
-    newparent = lasts[scalevid] 
+    newparent = lasts[scalevid]
     del lasts[scalevid]
 
     mchildren = macro_children_at_maxscale(mtg, vid, min(lasts.keys())) if len(lasts) > 0 else []
@@ -242,7 +247,7 @@ class MTGProducer(object):
     """ To produce an MTG in several steps """
     def __init__(self):
         self._production = []
-    
+
 
     def nproduce(self, *modules):
         self._production += modules
@@ -331,9 +336,9 @@ class MTGLsystem(object):
 
     def iterate(self, inputmtg = None):
         if inputmtg is None:
-            if self.currentmtg is None: self.init() 
+            if self.currentmtg is None: self.init()
             mtg = self.currentmtg
-        else : mtg = inputmtg 
+        else : mtg = inputmtg
 
         if 'startEach' in self.__dict__ : self.startEach(mtg)
 
@@ -364,9 +369,9 @@ class MTGLsystem(object):
 
     def interpret(self, inputmtg = None, turtle = None):
         if inputmtg is None:
-            if self.currentmtg is None: self.init() 
+            if self.currentmtg is None: self.init()
             mtg = self.currentmtg
-        else : mtg = inputmtg 
+        else : mtg = inputmtg
 
         if turtle is None:
             from openalea.plantgl.all import PglTurtle
@@ -397,7 +402,7 @@ class MTGLsystem(object):
         if inputmtg is None: mtg = self.currentmtg
         else : mtg = inputmtg
 
-        mtg.properties()['geometry'] = scene.todict() 
+        mtg.properties()['geometry'] = scene.todict()
 
         return scene
 
